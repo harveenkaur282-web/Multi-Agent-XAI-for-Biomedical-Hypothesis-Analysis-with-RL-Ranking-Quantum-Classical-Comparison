@@ -39,3 +39,6 @@ Runtime pipeline execution issues
 These fixes ensured stable execution of the end-to-end literature processing workflow and reflect core debugging practices commonly encountered in machine learning system development.
 
 
+![alt text](image.png)
+
+
