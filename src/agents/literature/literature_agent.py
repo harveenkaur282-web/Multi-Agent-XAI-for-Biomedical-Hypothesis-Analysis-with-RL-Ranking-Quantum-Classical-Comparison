@@ -1,78 +1,104 @@
+
 import json
 import os
+from typing import List, Dict, Any
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 class LiteratureAgent:
-    def __init__(self):
-        self.data_path = os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "..",
-            "..",
-            "data",
-            "sample",
-            "sample_pubmed_results.json",
+    """
+    Fetches and ranks biomedical papers against a hypothesis using TF-IDF.
+
+    Day 1: keyword overlap + abstract length bias  (removed)
+    Day 2: TF-IDF vectorisation + cosine similarity (current)
+    """
+
+    def __init__(self, data_path: str = None):
+        self.data_path = data_path or os.path.join(
+            os.path.dirname(__file__), "../../data/raw/sample_papers.json"
         )
-        self.papers = []
+        self.papers: List[Dict[str, Any]] = []
+        self.vectorizer = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 2),   # unigrams + bigrams catch phrases like "beta amyloid"
+            max_features=5000,
+        )
+        self._load_papers()
 
-    def load_papers(self):
-      with open(self.data_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    # ------------------------------------------------------------------
+    # Data loading
+    # ------------------------------------------------------------------
 
-      if isinstance(data, dict):
-        self.papers = data.get("results", [])
-      elif isinstance(data, list):
-        self.papers = data
-      else:
-        self.papers = []
+    def _load_papers(self) -> None:
+        """Load papers from JSON. Handles both list and dict formats."""
+        if not os.path.exists(self.data_path):
+            print(f"[LiteratureAgent] WARNING: data file not found at {self.data_path}")
+            return
+        with open(self.data_path, "r") as f:
+            raw = json.load(f)
+        self.papers = raw if isinstance(raw, list) else raw.get("papers", [])
+        print(f"[LiteratureAgent] Loaded {len(self.papers)} papers.")
 
-      return self.papers
+    # ------------------------------------------------------------------
+    # Core ranking
+    # ------------------------------------------------------------------
 
-    # ----------------------------
-    # STEP 2: Dummy "fetch"
-    # (later replace with PubMed API)
-    # ----------------------------
-    def fetch_papers(self, hypothesis: str):
-        print(f"\n🔍 Fetching papers for: {hypothesis}\n")
-        return self.load_papers()
+    def _build_document(self, paper: Dict[str, Any]) -> str:
+        """
+        Combine title + abstract into one document for TF-IDF.
+        Title is doubled to give it slightly higher weight.
+        """
+        title = paper.get("title", "")
+        abstract = paper.get("abstract", "")
+        return f"{title} {title} {abstract}"
 
-    # ----------------------------
-    # STEP 3: Simple scoring
-    # (baseline heuristic)
-    # ----------------------------
-    def score_paper(self, paper, hypothesis: str):
-        title = paper.get("title", "").lower()
-        abstract = paper.get("abstract", "").lower()
+    def rank_papers(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        """
+        Rank papers by cosine similarity to the hypothesis using TF-IDF.
 
-        hyp_words = set(hypothesis.lower().split())
+        Args:
+            hypothesis: The biomedical claim/question to evaluate.
+            top_k: Number of top papers to return.
 
-        # simple overlap score
-        text = title + " " + abstract
-        score = sum(1 for word in hyp_words if word in text)
+        Returns:
+            List of paper dicts with added 'relevance_score' field, sorted desc.
+        """
+        if not self.papers:
+            print("[LiteratureAgent] No papers loaded — returning empty list.")
+            return []
 
-        # small boost for longer abstracts (optional bias)
-        score += len(abstract) * 0.001
+        # Build corpus: hypothesis first, then all papers
+        documents = [hypothesis] + [self._build_document(p) for p in self.papers]
 
-        return score
+        # Fit + transform in one shot
+        tfidf_matrix = self.vectorizer.fit_transform(documents)
 
-    # ----------------------------
-    # STEP 4: Rank papers
-    # ----------------------------
-    def rank_papers(self, hypothesis: str):
+        # Hypothesis is row 0; papers are rows 1..N
+        hypothesis_vec = tfidf_matrix[0]
+        paper_vecs = tfidf_matrix[1:]
+
+        scores = cosine_similarity(hypothesis_vec, paper_vecs).flatten()
+
+        # Attach scores to paper dicts (copy to avoid mutating originals)
         scored = []
+        for paper, score in zip(self.papers, scores):
+            entry = dict(paper)
+            entry["relevance_score"] = round(float(score), 4)
+            scored.append(entry)
 
-        for paper in self.papers:
-            score = self.score_paper(paper, hypothesis)
-            paper["score"] = score
-            scored.append(paper)
+        # Sort descending and return top_k
+        scored.sort(key=lambda x: x["relevance_score"], reverse=True)
+        return scored[:top_k]
 
-        scored.sort(key=lambda x: x["score"], reverse=True)
-        return scored
+    # ------------------------------------------------------------------
+    # Public interface
+    # ------------------------------------------------------------------
 
-    # ----------------------------
-    # FULL PIPELINE
-    # ----------------------------
-    def run(self, hypothesis: str, top_k: int = 5):
-        papers = self.fetch_papers(hypothesis)
-        ranked = self.rank_papers(hypothesis)
-
-        return ranked[:top_k]
+    def run(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        """Main entry point used by pipelines."""
+        print(f"\n[LiteratureAgent] Hypothesis: '{hypothesis}'")
+        results = self.rank_papers(hypothesis, top_k)
+        print(f"[LiteratureAgent] Top {len(results)} papers ranked.")
+        return results

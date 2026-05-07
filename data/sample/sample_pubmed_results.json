@@ -1,18 +1,58 @@
 [
   {
-    "title": "Vitamin D and Depression: A Clinical Study",
-    "abstract": "This study explores the relationship between vitamin D deficiency and depressive symptoms in adults."
+    "paper_id": "p001",
+    "title": "Neuroinflammation and Alzheimer's Disease: Evidence for Microglial Activation",
+    "authors": ["Smith J", "Lee K"],
+    "year": 2022,
+    "abstract": "Growing evidence suggests that neuroinflammation plays a central role in Alzheimer's disease (AD) pathogenesis. We demonstrate that microglial activation is significantly increased in post-mortem AD brain tissue compared to healthy controls. Our findings support the hypothesis that chronic neuroinflammation accelerates amyloid-beta plaque deposition. Elevated levels of pro-inflammatory cytokines were consistently associated with greater cognitive decline. These results indicate a strong causal link between sustained microglial activity and neurodegeneration."
   },
   {
-    "title": "Role of Vitamin D in Brain Function",
-    "abstract": "Vitamin D influences neurotransmitter regulation and mood disorders including depression."
+    "paper_id": "p002",
+    "title": "Anti-inflammatory Treatment in AD Mouse Models: No Significant Cognitive Benefit",
+    "authors": ["Patel R", "Wong S"],
+    "year": 2021,
+    "abstract": "We investigated the effects of anti-inflammatory drug treatment in an APP/PS1 mouse model of Alzheimer's disease. Treatment did not result in significant improvement in memory tasks. No significant reduction in amyloid plaque burden was observed compared to vehicle controls. The data are inconsistent with the hypothesis that reducing neuroinflammation alone is sufficient to reverse cognitive decline. These findings suggest that inflammation may be a downstream effect rather than a primary driver of disease."
   },
   {
-    "title": "Nutrition and Mental Health Outcomes",
-    "abstract": "Dietary patterns and micronutrient levels are linked to mental health conditions such as anxiety and depression."
+    "paper_id": "p003",
+    "title": "BDNF Signaling Supports Synaptic Plasticity and Memory Consolidation",
+    "authors": ["Chen M", "Rao T"],
+    "year": 2023,
+    "abstract": "Brain-derived neurotrophic factor (BDNF) is a key regulator of synaptic plasticity. We show that BDNF administration significantly increased long-term potentiation (LTP) in hippocampal slices. Evidence from behavioral studies confirms that BDNF supports spatial memory consolidation in rodent models. These results are consistent with the hypothesis that BDNF deficiency contributes to memory impairment in neurodegenerative disease. Our data reveal a protective role of BDNF signaling in early-stage neurodegeneration."
   },
   {
-    "title": "Inflammation and Depression Pathways",
-    "abstract": "Inflammatory markers are associated with major depressive disorder and may interact with vitamin levels."
+    "paper_id": "p004",
+    "title": "Tau Hyperphosphorylation: Limited Association with Early Cognitive Symptoms",
+    "authors": ["Garcia L", "Kim P"],
+    "year": 2020,
+    "abstract": "Tau hyperphosphorylation is a hallmark of several tauopathies. In this longitudinal study, we found no significant correlation between early tau burden and initial cognitive symptoms in a cohort of 240 subjects. The relationship between tau accumulation and clinical presentation remains unclear and warrants further investigation. These results do not support a simple linear model of tau-driven cognitive decline. Future work should examine tau strains and their differential effects on synaptic function."
+  },
+  {
+    "paper_id": "p005",
+    "title": "Gut Microbiome Dysbiosis and Neuroinflammation: A Potential Bidirectional Pathway",
+    "authors": ["Nguyen A", "Sharma D"],
+    "year": 2023,
+    "abstract": "Emerging evidence suggests that gut microbiome dysbiosis may contribute to neuroinflammation via the gut-brain axis. We demonstrate that germ-free mice show significantly reduced microglial activation compared to conventionally housed controls. Short-chain fatty acids produced by gut bacteria were found to regulate microglial homeostasis. These findings support the hypothesis that gut dysbiosis promotes systemic and central inflammation. However, the clinical implications for human neurodegenerative disease remain potentially limited and preliminary."
+  },
+  {
+    "paper_id": "p006",
+    "title": "Amyloid-Beta Clearance via Lymphatic System: Evidence from Live Imaging",
+    "authors": ["Brown E", "Johansson F"],
+    "year": 2022,
+    "abstract": "The glymphatic system plays a critical role in amyloid-beta (Aβ) clearance from the brain. We reveal that sleep deprivation significantly impairs glymphatic flow and increases Aβ accumulation in mouse models. Tracer studies confirm that interstitial Aβ is cleared predominantly during slow-wave sleep. These results support the hypothesis that sleep disruption accelerates amyloid pathology. Interventions targeting glymphatic function may be beneficial for reducing early amyloid burden."
+  },
+  {
+    "paper_id": "p007",
+    "title": "Insulin Resistance and Cognitive Decline: A Meta-Analysis of Longitudinal Studies",
+    "authors": ["Martinez C", "Okafor U"],
+    "year": 2021,
+    "abstract": "Type 2 diabetes and insulin resistance have been consistently associated with increased risk of Alzheimer's disease. This meta-analysis of 18 longitudinal studies confirms that hyperinsulinemia is significantly associated with faster cognitive decline. Evidence from post-mortem studies indicates downregulated insulin signaling in AD brain tissue. These findings support the hypothesis that metabolic dysfunction contributes to AD pathogenesis. Intranasal insulin treatment showed beneficial effects in early-phase clinical trials."
+  },
+  {
+    "paper_id": "p008",
+    "title": "Oxidative Stress Markers in Mild Cognitive Impairment: Inconsistent Findings",
+    "authors": ["Li X", "Fernandez J"],
+    "year": 2020,
+    "abstract": "We investigated oxidative stress biomarkers in cerebrospinal fluid of patients with mild cognitive impairment (MCI). Results were inconsistent across patient subgroups and did not reach statistical significance for the primary endpoint. No clear association was found between lipid peroxidation markers and rate of progression to Alzheimer's disease. These findings are inconsistent with the hypothesis that oxidative stress is a reliable early biomarker for AD. Further study with standardised protocols is needed before clinical use can be recommended."
   }
 ]
