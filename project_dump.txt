@@ -1,0 +1,837 @@
+\n===== ./configs/xai_config.yaml =====
+\n===== ./configs/__init__.py =====
+\n===== ./configs/agent_config.yaml =====
+\n===== ./configs/base_config.yaml =====
+\n===== ./configs/rl_config.yaml =====
+\n===== ./configs/quantum_config.yaml =====
+\n===== ./setup.py =====
+\n===== ./docs/architecture.md =====
+\n===== ./docs/rl_design.md =====
+\n===== ./docs/quantum_design.md =====
+\n===== ./docs/agents.md =====
+\n===== ./docs/daily_progress/day_1.md =====
+## 1. Project Structure Setup
+
+A modular machine learning-style repository was designed to support scalable development. The project was organized into structured components including agents, pipelines, data, experiments, and configuration files.
+
+This setup establishes a research-grade architecture rather than a single-script implementation, enabling future integration of reinforcement learning, explainability modules, and quantum-classical comparison components.
+
+## 2. Mock Biomedical Dataset Creation
+
+A synthetic biomedical dataset was created in JSON format (sample_pubmed_results.json) containing sample research paper entries with titles and abstracts.
+
+It is important to note that this dataset is not sourced from PubMed or any external biomedical database. Instead, it serves as a controlled prototype dataset for testing and developing the initial literature analysis pipeline.
+
+## 3. Literature Agent Implementation
+
+A Literature Agent was implemented as a class-based module responsible for processing biomedical hypotheses and ranking relevant research papers.
+
+The agent performs the following functions:
+
+Data Loading: Reads structured research paper data from a JSON file using Python file handling operations.
+Hypothesis Processing: Accepts a biomedical hypothesis as input for analysis.
+Relevance Scoring: Computes a relevance score for each paper based on word overlap between the hypothesis and paper text, along with a minor weighting based on abstract length.
+Ranking: Sorts all papers in descending order of relevance score to identify the most relevant research articles.
+
+## 4. End-to-End Pipeline Execution
+
+A pipeline script (run_literature_only.py) was developed to execute the complete workflow.
+
+This script initializes the Literature Agent, processes a given biomedical hypothesis, executes the scoring and ranking pipeline, and outputs the top-ranked research papers along with their relevance scores and abstracts.
+
+## 5. Debugging and System Stabilization
+
+Several foundational engineering issues were identified and resolved during implementation, including:
+
+Python module import resolution issues within a modular project structure
+JSON data format inconsistencies between list and dictionary structures
+Empty or invalid dataset handling errors
+Runtime pipeline execution issues
+
+These fixes ensured stable execution of the end-to-end literature processing workflow and reflect core debugging practices commonly encountered in machine learning system development.
+
+
+![alt text](image.png)
+
+
+\n===== ./docs/xai_methods.md =====
+\n===== ./docs/getting_started.md =====
+\n===== ./requirements.txt =====
+\n===== ./data/sample/sample_pubmed_results.json =====
+[
+  {
+    "paper_id": "p001",
+    "title": "Neuroinflammation and Alzheimer's Disease: Evidence for Microglial Activation",
+    "authors": ["Smith J", "Lee K"],
+    "year": 2022,
+    "abstract": "Growing evidence suggests that neuroinflammation plays a central role in Alzheimer's disease (AD) pathogenesis. We demonstrate that microglial activation is significantly increased in post-mortem AD brain tissue compared to healthy controls. Our findings support the hypothesis that chronic neuroinflammation accelerates amyloid-beta plaque deposition. Elevated levels of pro-inflammatory cytokines were consistently associated with greater cognitive decline. These results indicate a strong causal link between sustained microglial activity and neurodegeneration."
+  },
+  {
+    "paper_id": "p002",
+    "title": "Anti-inflammatory Treatment in AD Mouse Models: No Significant Cognitive Benefit",
+    "authors": ["Patel R", "Wong S"],
+    "year": 2021,
+    "abstract": "We investigated the effects of anti-inflammatory drug treatment in an APP/PS1 mouse model of Alzheimer's disease. Treatment did not result in significant improvement in memory tasks. No significant reduction in amyloid plaque burden was observed compared to vehicle controls. The data are inconsistent with the hypothesis that reducing neuroinflammation alone is sufficient to reverse cognitive decline. These findings suggest that inflammation may be a downstream effect rather than a primary driver of disease."
+  },
+  {
+    "paper_id": "p003",
+    "title": "BDNF Signaling Supports Synaptic Plasticity and Memory Consolidation",
+    "authors": ["Chen M", "Rao T"],
+    "year": 2023,
+    "abstract": "Brain-derived neurotrophic factor (BDNF) is a key regulator of synaptic plasticity. We show that BDNF administration significantly increased long-term potentiation (LTP) in hippocampal slices. Evidence from behavioral studies confirms that BDNF supports spatial memory consolidation in rodent models. These results are consistent with the hypothesis that BDNF deficiency contributes to memory impairment in neurodegenerative disease. Our data reveal a protective role of BDNF signaling in early-stage neurodegeneration."
+  },
+  {
+    "paper_id": "p004",
+    "title": "Tau Hyperphosphorylation: Limited Association with Early Cognitive Symptoms",
+    "authors": ["Garcia L", "Kim P"],
+    "year": 2020,
+    "abstract": "Tau hyperphosphorylation is a hallmark of several tauopathies. In this longitudinal study, we found no significant correlation between early tau burden and initial cognitive symptoms in a cohort of 240 subjects. The relationship between tau accumulation and clinical presentation remains unclear and warrants further investigation. These results do not support a simple linear model of tau-driven cognitive decline. Future work should examine tau strains and their differential effects on synaptic function."
+  },
+  {
+    "paper_id": "p005",
+    "title": "Gut Microbiome Dysbiosis and Neuroinflammation: A Potential Bidirectional Pathway",
+    "authors": ["Nguyen A", "Sharma D"],
+    "year": 2023,
+    "abstract": "Emerging evidence suggests that gut microbiome dysbiosis may contribute to neuroinflammation via the gut-brain axis. We demonstrate that germ-free mice show significantly reduced microglial activation compared to conventionally housed controls. Short-chain fatty acids produced by gut bacteria were found to regulate microglial homeostasis. These findings support the hypothesis that gut dysbiosis promotes systemic and central inflammation. However, the clinical implications for human neurodegenerative disease remain potentially limited and preliminary."
+  },
+  {
+    "paper_id": "p006",
+    "title": "Amyloid-Beta Clearance via Lymphatic System: Evidence from Live Imaging",
+    "authors": ["Brown E", "Johansson F"],
+    "year": 2022,
+    "abstract": "The glymphatic system plays a critical role in amyloid-beta (Aβ) clearance from the brain. We reveal that sleep deprivation significantly impairs glymphatic flow and increases Aβ accumulation in mouse models. Tracer studies confirm that interstitial Aβ is cleared predominantly during slow-wave sleep. These results support the hypothesis that sleep disruption accelerates amyloid pathology. Interventions targeting glymphatic function may be beneficial for reducing early amyloid burden."
+  },
+  {
+    "paper_id": "p007",
+    "title": "Insulin Resistance and Cognitive Decline: A Meta-Analysis of Longitudinal Studies",
+    "authors": ["Martinez C", "Okafor U"],
+    "year": 2021,
+    "abstract": "Type 2 diabetes and insulin resistance have been consistently associated with increased risk of Alzheimer's disease. This meta-analysis of 18 longitudinal studies confirms that hyperinsulinemia is significantly associated with faster cognitive decline. Evidence from post-mortem studies indicates downregulated insulin signaling in AD brain tissue. These findings support the hypothesis that metabolic dysfunction contributes to AD pathogenesis. Intranasal insulin treatment showed beneficial effects in early-phase clinical trials."
+  },
+  {
+    "paper_id": "p008",
+    "title": "Oxidative Stress Markers in Mild Cognitive Impairment: Inconsistent Findings",
+    "authors": ["Li X", "Fernandez J"],
+    "year": 2020,
+    "abstract": "We investigated oxidative stress biomarkers in cerebrospinal fluid of patients with mild cognitive impairment (MCI). Results were inconsistent across patient subgroups and did not reach statistical significance for the primary endpoint. No clear association was found between lipid peroxidation markers and rate of progression to Alzheimer's disease. These findings are inconsistent with the hypothesis that oxidative stress is a reliable early biomarker for AD. Further study with standardised protocols is needed before clinical use can be recommended."
+  }
+]\n===== ./data/sample/sample_hypotheses.json =====
+\n===== ./README.md =====
+# Multi-Agent-XAI-for-Biomedical-Hypothesis-Analysis-with-RL-Ranking-Quantum-Classical-Comparison\n===== ./pipelines/run_hypothesis_eval.py =====
+\n===== ./pipelines/run_rl_training.py =====
+\n===== ./pipelines/run_xai_audit.py =====
+\n===== ./pipelines/__init__.py =====
+\n===== ./pipelines/run_evidence_pipeline.py =====
+"""
+run_evidence_pipeline.py — Day 2 End-to-End Pipeline
+
+Flow:
+  hypothesis
+      ↓
+  LiteratureAgent  → TF-IDF ranked papers
+      ↓
+  EvidenceAgent    → extract SUPPORT/CONTRADICT sentences per paper
+      ↓
+  EvidenceBuilder  → aggregate into EvidenceStore + print verdict
+
+Run from project root:
+    python pipelines/run_evidence_pipeline.py
+"""
+
+import sys
+import os
+
+# Make sure src is on path regardless of where you run from
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
+
+from agents.literature_agent import LiteratureAgent
+from agents.evidence_agent import EvidenceAgent
+from evidence_engine.builder import EvidenceBuilder
+
+
+def run_evidence_pipeline(hypothesis: str, top_k: int = 6) -> dict:
+    """
+    Full evidence pipeline for a given hypothesis.
+
+    Args:
+        hypothesis: Biomedical claim to evaluate.
+        top_k: Number of papers to retrieve and analyse.
+
+    Returns:
+        EvidenceStore dict with verdict and structured records.
+    """
+    print("\n" + "=" * 60)
+    print("  EVIDENCE PIPELINE — DAY 2")
+    print("=" * 60)
+
+    # Stage 1: Literature retrieval + TF-IDF ranking
+    lit_agent = LiteratureAgent()
+    ranked_papers = lit_agent.run(hypothesis, top_k=top_k)
+
+    if not ranked_papers:
+        print("No papers retrieved. Check your data path.")
+        return {}
+
+    # Stage 2: Evidence extraction
+    ev_agent = EvidenceAgent()
+    evidence_records = ev_agent.run(ranked_papers, hypothesis)
+
+    # Stage 3: Build and save store
+    builder = EvidenceBuilder()
+    store = builder.build(hypothesis, evidence_records)
+    builder.save(store)
+    builder.print_summary(store)
+
+    return store
+
+
+if __name__ == "__main__":
+    # Test with a clear biomedical hypothesis
+    hypothesis = (
+        "Neuroinflammation and microglial activation drive amyloid-beta "
+        "accumulation and cognitive decline in Alzheimer's disease"
+    )
+
+    store = run_evidence_pipeline(hypothesis, top_k=6)
+
+    # Optional: print full JSON output
+    import json
+    print("\n--- Raw Store (first record) ---")
+    if store.get("records"):
+        print(json.dumps(store["records"][0], indent=2))\n===== ./pipelines/run_literature_only.py =====
+from src.agents.literature.literature_agent import LiteratureAgent
+
+
+def main():
+    agent = LiteratureAgent()
+
+    hypothesis = "Vitamin D deficiency is linked to depression"
+
+    results = agent.run(hypothesis, top_k=5)
+
+    print("\n🏆 Top Papers:\n")
+
+    for i, p in enumerate(results, 1):
+        print(f"{i}. {p.get('title')}")
+        print(f"   Score: {p['score']:.3f}")
+        print(f"   Abstract: {p.get('abstract', '')[:120]}...\n")
+
+
+if __name__ == "__main__":
+    main()\n===== ./pipelines/run_quantum_benchmark.py =====
+\n===== ./pipelines/run_full_pipeline.py =====
+\n===== ./pipelines/run_full_system.py =====
+\n===== ./project_dump.txt =====
+\n===== ./requirements-dev.txt =====
+\n===== ./scripts/fetch_sample_data.py =====
+\n===== ./scripts/evaluate_baseline.py =====
+\n===== ./experiments/notebooks/01_data_exploration.ipynb =====
+\n===== ./experiments/notebooks/03_rl_training_curves.ipynb =====
+\n===== ./experiments/notebooks/02_literature_agent_demo.ipynb =====
+\n===== ./experiments/notebooks/04_quantum_classical_comparison.ipynb =====
+\n===== ./experiments/notebooks/05_shap_analysis.ipynb =====
+\n===== ./experiments/notebooks/06_end_to_end_demo.ipynb =====
+\n===== ./experiments/configs/exp_003_quantum_vqc.yaml =====
+\n===== ./experiments/configs/exp_002_rl_ppo.yaml =====
+\n===== ./experiments/configs/exp_001_baseline.yaml =====
+\n===== ./src/knowledge_graph/kg_manager.py =====
+\n===== ./src/knowledge_graph/entity_linker.py =====
+\n===== ./src/knowledge_graph/__init__.py =====
+\n===== ./src/knowledge_graph/rdf_parser.py =====
+\n===== ./src/knowledge_graph/neo4j_connector.py =====
+\n===== ./src/fusion/result_aggregator.py =====
+\n===== ./src/fusion/__init__.py =====
+\n===== ./src/fusion/confidence_estimator.py =====
+\n===== ./src/fusion/report_generator.py =====
+\n===== ./src/fusion/visualizer.py =====
+\n===== ./src/agents/quantum/benchmark.py =====
+\n===== ./src/agents/quantum/quantum_agent.py =====
+\n===== ./src/agents/quantum/quantum_kernel.py =====
+\n===== ./src/agents/quantum/circuit_builder.py =====
+\n===== ./src/agents/quantum/classical_baseline.py =====
+\n===== ./src/agents/quantum/__init__.py =====
+\n===== ./src/agents/quantum/qsvm.py =====
+\n===== ./src/agents/quantum/vqc_classifier.py =====
+\n===== ./src/agents/evidence_agent.py =====
+#heuristic evidence extraction
+
+import re
+from typing import List, Dict, Any
+
+SUPPORT_CUES = [
+    "show", "shows", "showed", "demonstrate", "demonstrates", "demonstrated",
+    "confirm", "confirms", "confirmed", "support", "supports", "supported",
+    "evidence", "suggest", "suggests", "suggested", "indicate", "indicates",
+    "found", "find", "reveal", "reveals", "revealed", "consistent with",
+    "associated with", "significantly increased", "significantly decreased",
+    "significantly improved", "beneficial", "effective", "efficacious",
+    "positive", "upregulated", "downregulated",
+]
+
+CONTRADICT_CUES = [
+    "no significant", "not significant", "failed to", "did not", "does not",
+    "no evidence", "contradict", "contradicts", "contradicted", "refute",
+    "refutes", "refuted", "inconsistent", "no association", "no effect",
+    "not associated", "null result", "negative result", "no difference",
+    "no improvement", "no benefit", "ineffective", "no correlation",
+]
+
+HEDGE_CUES = [
+    "may", "might", "could", "possibly", "potentially", "unclear",
+    "uncertain", "unknown", "further study", "future work", "warrants",
+    "limited", "preliminary",
+]
+
+
+class EvidenceAgent:
+    """
+    Extracts evidence sentences from paper abstracts.
+
+    For each ranked paper, it:
+      1. Splits the abstract into sentences.
+      2. Classifies each sentence as SUPPORT / CONTRADICT / NEUTRAL.
+      3. Returns a structured EvidenceRecord.
+
+    Day 2: heuristic lexicon-based classification.
+    Day 5+: replace/augment with transformer-based NLI (zero-shot).
+    """
+
+    def __init__(self, min_sentence_length: int = 20):
+        """
+        Args:
+            min_sentence_length: Skip very short sentences (e.g. "Results.")
+        """
+        self.min_sentence_length = min_sentence_length
+
+    def _split_sentences(self, text: str) -> List[str]:
+        """Basic sentence splitter. Good enough for structured abstracts."""
+        # Split on period/exclamation/question followed by space+capital
+        sentences = re.split(r'(?<=[.!?])\s+(?=[A-Z])', text.strip())
+        return [s.strip() for s in sentences if len(s.strip()) >= self.min_sentence_length]
+
+    def _classify_sentence(self, sentence: str) -> str:
+        """
+        Returns 'SUPPORT', 'CONTRADICT', or 'NEUTRAL'.
+        Contradiction cues take priority over support cues.
+        """
+        lower = sentence.lower()
+
+        # Count cue hits
+        contradict_hits = sum(1 for cue in CONTRADICT_CUES if cue in lower)
+        support_hits = sum(1 for cue in SUPPORT_CUES if cue in lower)
+        hedge_hits = sum(1 for cue in HEDGE_CUES if cue in lower)
+
+        if contradict_hits > 0:
+            return "CONTRADICT"
+        if support_hits > 0:
+            # Downgrade to NEUTRAL if heavily hedged
+            if hedge_hits >= 2:
+                return "NEUTRAL"
+            return "SUPPORT"
+        return "NEUTRAL"
+
+    def _score_sentence_relevance(self, sentence: str, hypothesis: str) -> float:
+        """
+        Simple word overlap score between sentence and hypothesis.
+        Range: 0.0 - 1.0. Used to filter low-relevance sentences.
+        """
+        hyp_words = set(hypothesis.lower().split())
+        sent_words = set(sentence.lower().split())
+        # Remove very short words (stop-word-like)
+        hyp_words = {w for w in hyp_words if len(w) > 3}
+        sent_words = {w for w in sent_words if len(w) > 3}
+        if not hyp_words:
+            return 0.0
+        overlap = hyp_words & sent_words
+        return len(overlap) / len(hyp_words)
+
+    # ------------------------------------------------------------------
+    # Core extraction
+    # ------------------------------------------------------------------
+
+    def extract_evidence(
+        self,
+        paper: Dict[str, Any],
+        hypothesis: str,
+        min_relevance: float = 0.05,
+    ) -> Dict[str, Any]:
+        """
+        Extract structured evidence from a single paper.
+
+        Args:
+            paper: Paper dict with at least 'abstract', 'title', 'paper_id'.
+            hypothesis: The hypothesis being evaluated.
+            min_relevance: Minimum word overlap to include a sentence.
+
+        Returns:
+            EvidenceRecord dict.
+        """
+        abstract = paper.get("abstract", "")
+        sentences = self._split_sentences(abstract)
+
+        evidence_sentences = []
+        support_count = 0
+        contradict_count = 0
+
+        for sent in sentences:
+            relevance = self._score_sentence_relevance(sent, hypothesis)
+            if relevance < min_relevance:
+                continue  # skip completely off-topic sentences
+
+            label = self._classify_sentence(sent)
+            if label == "SUPPORT":
+                support_count += 1
+            elif label == "CONTRADICT":
+                contradict_count += 1
+
+            evidence_sentences.append({
+                "sentence": sent,
+                "label": label,
+                "relevance": round(relevance, 3),
+            })
+
+        # Overall stance: whichever has more hits wins; tie → NEUTRAL
+        if support_count > contradict_count:
+            overall_stance = "SUPPORT"
+        elif contradict_count > support_count:
+            overall_stance = "CONTRADICT"
+        else:
+            overall_stance = "NEUTRAL"
+
+        return {
+            "paper_id": paper.get("paper_id", paper.get("id", "unknown")),
+            "title": paper.get("title", ""),
+            "relevance_score": paper.get("relevance_score", 0.0),
+            "overall_stance": overall_stance,
+            "support_count": support_count,
+            "contradict_count": contradict_count,
+            "evidence_sentences": evidence_sentences,
+            "total_sentences_extracted": len(evidence_sentences),
+        }
+
+    # ------------------------------------------------------------------
+    # Batch processing
+    # ------------------------------------------------------------------
+
+    def run(
+        self,
+        ranked_papers: List[Dict[str, Any]],
+        hypothesis: str,
+    ) -> List[Dict[str, Any]]:
+        """
+        Process all ranked papers and return evidence records.
+
+        Args:
+            ranked_papers: Output from LiteratureAgent.run()
+            hypothesis: The biomedical hypothesis being tested.
+
+        Returns:
+            List of EvidenceRecord dicts, sorted by relevance_score desc.
+        """
+        print(f"\n[EvidenceAgent] Extracting evidence from {len(ranked_papers)} papers...")
+        records = []
+        for paper in ranked_papers:
+            record = self.extract_evidence(paper, hypothesis)
+            records.append(record)
+            stance_icon = {"SUPPORT": "✅", "CONTRADICT": "❌", "NEUTRAL": "⚪"}.get(
+                record["overall_stance"], "?"
+            )
+            print(
+                f"  {stance_icon} [{record['overall_stance']:10s}] "
+                f"score={record['relevance_score']:.3f} | "
+                f"+{record['support_count']} -{record['contradict_count']} | "
+                f"{record['title'][:60]}"
+            )
+
+        print(f"[EvidenceAgent] Done. {len(records)} evidence records produced.")
+        return records\n===== ./src/agents/hypothesis/validator.py =====
+\n===== ./src/agents/hypothesis/__init__.py =====
+\n===== ./src/agents/hypothesis/generator.py =====
+\n===== ./src/agents/hypothesis/scorer.py =====
+\n===== ./src/agents/reasoning/gnn_model.py =====
+\n===== ./src/agents/reasoning/__init__.py =====
+\n===== ./src/agents/reasoning/hypothesis_scorer.py =====
+\n===== ./src/agents/reasoning/causal_inference.py =====
+\n===== ./src/agents/reasoning/llm_critic.py =====
+\n===== ./src/agents/reasoning/reasoning_agent.py =====
+\n===== ./src/agents/__init__.py =====
+\n===== ./src/agents/literature/embedding_model.py =====
+\n===== ./src/agents/literature/graph_builder.py =====
+\n===== ./src/agents/literature/pubmed_fetcher.py =====
+\n===== ./src/agents/literature/__init__.py =====
+\n===== ./src/agents/literature/biorxiv_fetcher.py =====
+\n===== ./src/agents/literature/literature_agent.py =====
+
+import json
+import os
+from typing import List, Dict, Any
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+
+class LiteratureAgent:
+    """
+    Fetches and ranks biomedical papers against a hypothesis using TF-IDF.
+
+    Day 1: keyword overlap + abstract length bias  (removed)
+    Day 2: TF-IDF vectorisation + cosine similarity (current)
+    """
+
+    def __init__(self, data_path: str = None):
+        self.data_path = data_path or os.path.join(
+            os.path.dirname(__file__), "../../data/raw/sample_papers.json"
+        )
+        self.papers: List[Dict[str, Any]] = []
+        self.vectorizer = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 2),   # unigrams + bigrams catch phrases like "beta amyloid"
+            max_features=5000,
+        )
+        self._load_papers()
+
+    # ------------------------------------------------------------------
+    # Data loading
+    # ------------------------------------------------------------------
+
+    def _load_papers(self) -> None:
+        """Load papers from JSON. Handles both list and dict formats."""
+        if not os.path.exists(self.data_path):
+            print(f"[LiteratureAgent] WARNING: data file not found at {self.data_path}")
+            return
+        with open(self.data_path, "r") as f:
+            raw = json.load(f)
+        self.papers = raw if isinstance(raw, list) else raw.get("papers", [])
+        print(f"[LiteratureAgent] Loaded {len(self.papers)} papers.")
+
+    # ------------------------------------------------------------------
+    # Core ranking
+    # ------------------------------------------------------------------
+
+    def _build_document(self, paper: Dict[str, Any]) -> str:
+        """
+        Combine title + abstract into one document for TF-IDF.
+        Title is doubled to give it slightly higher weight.
+        """
+        title = paper.get("title", "")
+        abstract = paper.get("abstract", "")
+        return f"{title} {title} {abstract}"
+
+    def rank_papers(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        """
+        Rank papers by cosine similarity to the hypothesis using TF-IDF.
+
+        Args:
+            hypothesis: The biomedical claim/question to evaluate.
+            top_k: Number of top papers to return.
+
+        Returns:
+            List of paper dicts with added 'relevance_score' field, sorted desc.
+        """
+        if not self.papers:
+            print("[LiteratureAgent] No papers loaded — returning empty list.")
+            return []
+
+        # Build corpus: hypothesis first, then all papers
+        documents = [hypothesis] + [self._build_document(p) for p in self.papers]
+
+        # Fit + transform in one shot
+        tfidf_matrix = self.vectorizer.fit_transform(documents)
+
+        # Hypothesis is row 0; papers are rows 1..N
+        hypothesis_vec = tfidf_matrix[0]
+        paper_vecs = tfidf_matrix[1:]
+
+        scores = cosine_similarity(hypothesis_vec, paper_vecs).flatten()
+
+        # Attach scores to paper dicts (copy to avoid mutating originals)
+        scored = []
+        for paper, score in zip(self.papers, scores):
+            entry = dict(paper)
+            entry["relevance_score"] = round(float(score), 4)
+            scored.append(entry)
+
+        # Sort descending and return top_k
+        scored.sort(key=lambda x: x["relevance_score"], reverse=True)
+        return scored[:top_k]
+
+    # ------------------------------------------------------------------
+    # Public interface
+    # ------------------------------------------------------------------
+
+    def run(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        """Main entry point used by pipelines."""
+        print(f"\n[LiteratureAgent] Hypothesis: '{hypothesis}'")
+        results = self.rank_papers(hypothesis, top_k)
+        print(f"[LiteratureAgent] Top {len(results)} papers ranked.")
+        return results\n===== ./src/agents/literature/nlp_extractor.py =====
+\n===== ./src/agents/xai/shap_explainer.py =====
+\n===== ./src/agents/xai/gnn_explainer.py =====
+\n===== ./src/agents/xai/counterfactual.py =====
+\n===== ./src/agents/xai/__init__.py =====
+\n===== ./src/agents/xai/lime_explainer.py =====
+\n===== ./src/agents/xai/xai_agent.py =====
+\n===== ./src/agents/xai/attention_visualizer.py =====
+\n===== ./src/agents/base_agent.py =====
+\n===== ./src/orchestrator/agent_registry.py =====
+\n===== ./src/orchestrator/__init__.py =====
+\n===== ./src/orchestrator/task_queue.py =====
+\n===== ./src/orchestrator/orchestrator_agent.py =====
+\n===== ./src/orchestrator/message_bus.py =====
+\n===== ./src/__init__.py =====
+\n===== ./src/evidence/__init__.py =====
+\n===== ./src/evidence/linker.py =====
+\n===== ./src/evidence/scorer.py =====
+\n===== ./src/evidence/builder.py =====
+"""
+EvidenceBuilder — Day 2
+Takes raw evidence records from EvidenceAgent and builds a structured
+EvidenceStore: a dict keyed by paper_id with aggregated stats.
+
+This is what later modules (ReasoningAgent, HypothesisScorer) will consume.
+"""
+
+import json
+import os
+from typing import List, Dict, Any
+from datetime import datetime
+
+
+class EvidenceBuilder:
+    """
+    Assembles evidence records into a queryable EvidenceStore.
+
+    Structure of the store:
+    {
+        "hypothesis": str,
+        "created_at": ISO timestamp,
+        "summary": {
+            "total_papers": int,
+            "supporting": int,
+            "contradicting": int,
+            "neutral": int,
+            "overall_verdict": "SUPPORTED" | "CONTRADICTED" | "INCONCLUSIVE"
+        },
+        "records": [ EvidenceRecord, ... ]  # sorted by relevance
+    }
+    """
+
+    def __init__(self, store_path: str = None):
+        self.store_path = store_path or os.path.join(
+            os.path.dirname(__file__), "../../data/evidence_store/evidence_store.json"
+        )
+
+    def build(
+        self,
+        hypothesis: str,
+        evidence_records: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """
+        Build an EvidenceStore from a list of evidence records.
+
+        Args:
+            hypothesis: The hypothesis being evaluated.
+            evidence_records: Output from EvidenceAgent.run()
+
+        Returns:
+            Structured EvidenceStore dict.
+        """
+        supporting = [r for r in evidence_records if r["overall_stance"] == "SUPPORT"]
+        contradicting = [r for r in evidence_records if r["overall_stance"] == "CONTRADICT"]
+        neutral = [r for r in evidence_records if r["overall_stance"] == "NEUTRAL"]
+
+        # Verdict logic: simple majority vote
+        if len(supporting) > len(contradicting) and len(supporting) > len(neutral):
+            verdict = "SUPPORTED"
+        elif len(contradicting) > len(supporting):
+            verdict = "CONTRADICTED"
+        else:
+            verdict = "INCONCLUSIVE"
+
+        store = {
+            "hypothesis": hypothesis,
+            "created_at": datetime.utcnow().isoformat(),
+            "summary": {
+                "total_papers": len(evidence_records),
+                "supporting": len(supporting),
+                "contradicting": len(contradicting),
+                "neutral": len(neutral),
+                "overall_verdict": verdict,
+            },
+            "records": sorted(
+                evidence_records,
+                key=lambda x: x["relevance_score"],
+                reverse=True,
+            ),
+        }
+        return store
+
+    def save(self, store: Dict[str, Any]) -> None:
+        """Persist evidence store to JSON."""
+        os.makedirs(os.path.dirname(self.store_path), exist_ok=True)
+        with open(self.store_path, "w") as f:
+            json.dump(store, f, indent=2)
+        print(f"[EvidenceBuilder] Store saved → {self.store_path}")
+
+    def load(self) -> Dict[str, Any]:
+        """Load a previously saved evidence store."""
+        if not os.path.exists(self.store_path):
+            return {}
+        with open(self.store_path, "r") as f:
+            return json.load(f)
+
+    def print_summary(self, store: Dict[str, Any]) -> None:
+        """Pretty-print the evidence store summary."""
+        s = store.get("summary", {})
+        print("\n" + "=" * 60)
+        print(f"  HYPOTHESIS: {store['hypothesis']}")
+        print(f"  VERDICT:    {s.get('overall_verdict', 'N/A')}")
+        print(f"  Papers:     {s.get('total_papers', 0)} total")
+        print(f"  ✅ Support:  {s.get('supporting', 0)}")
+        print(f"  ❌ Contradict: {s.get('contradicting', 0)}")
+        print(f"  ⚪ Neutral:  {s.get('neutral', 0)}")
+        print("=" * 60)
+
+        # Show top supporting sentences across all papers
+        all_support_sents = []
+        for rec in store.get("records", []):
+            for sent_obj in rec.get("evidence_sentences", []):
+                if sent_obj["label"] == "SUPPORT":
+                    all_support_sents.append({
+                        "title": rec["title"],
+                        "sentence": sent_obj["sentence"],
+                        "relevance": sent_obj["relevance"],
+                    })
+
+        all_support_sents.sort(key=lambda x: x["relevance"], reverse=True)
+
+        if all_support_sents:
+            print("\n  📌 Top supporting sentences:")
+            for item in all_support_sents[:3]:
+                print(f"    [{item['title'][:40]}...]")
+                print(f"    → {item['sentence'][:120]}")\n===== ./src/evidence/graph.py =====
+\n===== ./src/utils/seed.py =====
+\n===== ./src/utils/__init__.py =====
+\n===== ./src/utils/logger.py =====
+\n===== ./src/utils/text_preprocessor.py =====
+\n===== ./src/utils/config_loader.py =====
+\n===== ./src/utils/cache.py =====
+\n===== ./src/utils/metrics.py =====
+\n===== ./src/utils/io_utils.py =====
+\n===== ./src/rl/ppo_agent.py =====
+\n===== ./src/rl/replay_buffer.py =====
+\n===== ./src/rl/ranker_env.py =====
+\n===== ./src/rl/__init__.py =====
+\n===== ./src/rl/evaluator.py =====
+\n===== ./src/rl/dqn_agent.py =====
+\n===== ./src/rl/trainer.py =====
+\n===== ./src/rl/reward_model.py =====
+\n===== ./tests/conftest.py =====
+\n===== ./tests/unit/test_literature_agent.py =====
+\n===== ./tests/unit/test_rl_ranker.py =====
+\n===== ./tests/unit/test_reasoning_agent.py =====
+\n===== ./tests/unit/test_fusion.py =====
+\n===== ./tests/unit/test_orchestrator.py =====
+\n===== ./tests/unit/test_quantum_agent.py =====
+\n===== ./tests/unit/test_evidence_agent.py =====
+"""
+tests/test_evidence_agent.py
+
+Run with:
+    pytest tests/test_evidence_agent.py -v
+"""
+
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
+
+from agents.evidence_agent import EvidenceAgent
+
+
+HYPOTHESIS = "neuroinflammation drives amyloid accumulation in Alzheimer's disease"
+
+MOCK_PAPER_SUPPORT = {
+    "paper_id": "test_001",
+    "title": "Neuroinflammation Test Paper",
+    "relevance_score": 0.75,
+    "abstract": (
+        "We demonstrate that microglial activation is significantly increased in AD. "
+        "Evidence confirms that neuroinflammation supports amyloid-beta plaque formation. "
+        "These findings support the hypothesis that inflammation drives cognitive decline."
+    ),
+}
+
+MOCK_PAPER_CONTRADICT = {
+    "paper_id": "test_002",
+    "title": "Anti-inflammation Paper",
+    "relevance_score": 0.40,
+    "abstract": (
+        "Anti-inflammatory treatment did not result in significant improvement. "
+        "No significant reduction in amyloid burden was observed. "
+        "These findings are inconsistent with the hypothesis."
+    ),
+}
+
+MOCK_PAPER_EMPTY = {
+    "paper_id": "test_003",
+    "title": "Empty Abstract",
+    "relevance_score": 0.10,
+    "abstract": "",
+}
+
+
+def test_support_detection():
+    agent = EvidenceAgent()
+    record = agent.extract_evidence(MOCK_PAPER_SUPPORT, HYPOTHESIS)
+    assert record["overall_stance"] == "SUPPORT", f"Expected SUPPORT, got {record['overall_stance']}"
+    assert record["support_count"] > 0
+
+
+def test_contradict_detection():
+    agent = EvidenceAgent()
+    record = agent.extract_evidence(MOCK_PAPER_CONTRADICT, HYPOTHESIS)
+    assert record["overall_stance"] == "CONTRADICT", f"Expected CONTRADICT, got {record['overall_stance']}"
+    assert record["contradict_count"] > 0
+
+
+def test_empty_abstract_handled():
+    agent = EvidenceAgent()
+    record = agent.extract_evidence(MOCK_PAPER_EMPTY, HYPOTHESIS)
+    assert record["total_sentences_extracted"] == 0
+    assert record["overall_stance"] == "NEUTRAL"
+
+
+def test_batch_run():
+    agent = EvidenceAgent()
+    papers = [MOCK_PAPER_SUPPORT, MOCK_PAPER_CONTRADICT, MOCK_PAPER_EMPTY]
+    records = agent.run(papers, HYPOTHESIS)
+    assert len(records) == 3
+    stances = {r["paper_id"]: r["overall_stance"] for r in records}
+    assert stances["test_001"] == "SUPPORT"
+    assert stances["test_002"] == "CONTRADICT"
+    assert stances["test_003"] == "NEUTRAL"
+
+
+def test_evidence_sentences_have_required_keys():
+    agent = EvidenceAgent()
+    record = agent.extract_evidence(MOCK_PAPER_SUPPORT, HYPOTHESIS)
+    for sent_obj in record["evidence_sentences"]:
+        assert "sentence" in sent_obj
+        assert "label" in sent_obj
+        assert "relevance" in sent_obj
+        assert sent_obj["label"] in ("SUPPORT", "CONTRADICT", "NEUTRAL")
+
+
+if __name__ == "__main__":
+    test_support_detection()
+    test_contradict_detection()
+    test_empty_abstract_handled()
+    test_batch_run()
+    test_evidence_sentences_have_required_keys()
+    print("\n✅ All tests passed.")\n===== ./tests/unit/test_xai_agent.py =====
+\n===== ./tests/__init__.py =====
+\n===== ./tests/integration/test_full_pipeline.py =====
+\n===== ./tests/integration/test_rl_env.py =====
+\n===== ./tests/integration/test_agent_pipeline.py =====
+\n===== ./tests/fixtures/mock_pubmed_response.json =====
+\n===== ./tests/fixtures/mock_hypotheses.json =====
