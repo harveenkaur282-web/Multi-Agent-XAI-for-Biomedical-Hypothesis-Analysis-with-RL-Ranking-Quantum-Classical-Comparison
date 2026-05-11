@@ -1,66 +1,175 @@
-
-import json
-import os
 from typing import List, Dict, Any
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from src.agents.literature.query_builder import QueryBuilder
+from src.agents.literature.pubmed_fetcher import PubMedFetcher
+
 
 class LiteratureAgent:
 
-    def __init__(self, data_path: str = None):
-        self.data_path = data_path or os.path.join(
-            os.path.dirname(__file__), "../../data/raw/sample_papers.json"
+    def __init__(
+        self,
+        email: str = "harveenkaur282@gmail.com",
+        max_results: int = 15,
+    ):
+
+        self.max_results = max_results
+        self.query_builder = QueryBuilder()
+
+        self.fetcher = PubMedFetcher(
+            email=email,
+            tool_name="multi_agent_biomedical_reasoning_system",
         )
-        self.papers: List[Dict[str, Any]] = []
         self.vectorizer = TfidfVectorizer(
             stop_words="english",
-            ngram_range=(1, 2),   # unigrams + bigrams catch phrases like "beta amyloid"
+            ngram_range=(1, 2),
             max_features=5000,
         )
-        self._load_papers()
 
-    def _load_papers(self) -> None:
-        if not os.path.exists(self.data_path):
-            print(f"[LiteratureAgent] WARNING: data file not found at {self.data_path}")
-            return
-        with open(self.data_path, "r") as f:
-            raw = json.load(f)
-        self.papers = raw if isinstance(raw, list) else raw.get("papers", [])
-        print(f"[LiteratureAgent] Loaded {len(self.papers)} papers.")
-
-    def _build_document(self, paper: Dict[str, Any]) -> str:
+    def _build_document(
+        self,
+        paper: Dict[str, Any]
+    ) -> str:
         title = paper.get("title", "")
         abstract = paper.get("abstract", "")
+
         return f"{title} {title} {abstract}"
 
-    def rank_papers(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
-        if not self.papers:
-            print("[LiteratureAgent] No papers loaded — returning empty list.")
+#ranking using tfidf cosine similarity
+    def rank_papers(
+        self,
+        hypothesis: str,
+        papers: List[Dict[str, Any]],
+        top_k: int = 5,
+    ) -> List[Dict[str, Any]]:
+
+        if not papers:
+            print("[LiteratureAgent] No papers retrieved.")
             return []
 
-        documents = [hypothesis] + [self._build_document(p) for p in self.papers]
+        documents = [
+            hypothesis
+        ] + [
+            self._build_document(p)
+            for p in papers
+        ]
 
         tfidf_matrix = self.vectorizer.fit_transform(documents)
 
         hypothesis_vec = tfidf_matrix[0]
+
         paper_vecs = tfidf_matrix[1:]
 
-        scores = cosine_similarity(hypothesis_vec, paper_vecs).flatten()
+        scores = cosine_similarity(
+            hypothesis_vec,
+            paper_vecs
+        ).flatten()
 
         scored = []
-        for paper, score in zip(self.papers, scores):
+
+        for paper, score in zip(papers, scores):
+
             entry = dict(paper)
-            entry["relevance_score"] = round(float(score), 4)
+
+            entry["relevance_score"] = round(
+                float(score),
+                4
+            )
+
             scored.append(entry)
 
-        scored.sort(key=lambda x: x["relevance_score"], reverse=True)
+        scored.sort(
+            key=lambda x: x["relevance_score"],
+            reverse=True,
+        )
+
         return scored[:top_k]
 
-    def run(self, hypothesis: str, top_k: int = 5) -> List[Dict[str, Any]]:
-        """Main entry point used by pipelines."""
-        print(f"\n[LiteratureAgent] Hypothesis: '{hypothesis}'")
-        results = self.rank_papers(hypothesis, top_k)
-        print(f"[LiteratureAgent] Top {len(results)} papers ranked.")
-        return results
+    def retrieve_papers(
+        self,
+        hypothesis: str,
+    ) -> List[Dict[str, Any]]:
+
+
+        query = self.query_builder.run(hypothesis)
+
+        papers = self.fetcher.run(
+            query=query,
+            max_results=self.max_results,
+        )
+
+        return papers
+
+    def run(
+        self,
+        hypothesis: str,
+        top_k: int = 5,
+    ) -> List[Dict[str, Any]]:
+
+        print("\n" + "=" * 60)
+        print("  LITERATURE RETRIEVAL PIPELINE")
+        print("=" * 60)
+
+        print(f"\n[LiteratureAgent] Hypothesis:")
+        print(f"  {hypothesis}")
+
+        papers = self.retrieve_papers(hypothesis)
+
+        print(f"\n[LiteratureAgent] Retrieved {len(papers)} papers.")
+
+        ranked = self.rank_papers(
+            hypothesis=hypothesis,
+            papers=papers,
+            top_k=top_k,
+        )
+
+        print(f"[LiteratureAgent] Top {len(ranked)} papers ranked.")
+
+        return ranked
+
+if __name__ == "__main__":
+
+    agent = LiteratureAgent(
+        email="harveenkaur282@gmail.com"
+    )
+
+    hypothesis = (
+        "Vitamin D deficiency is linked to depression"
+    )
+
+    results = agent.run(
+        hypothesis=hypothesis,
+        top_k=5,
+    )
+
+    print("\n--- TOP RESULTS ---\n")
+
+    for i, paper in enumerate(results, 1):
+
+        print(f"{i}. {paper['title']}")
+
+        print(
+            f"   Relevance Score: "
+            f"{paper['relevance_score']}"
+        )
+
+        print(
+            f"   Journal: "
+            f"{paper.get('journal', 'N/A')}"
+        )
+
+        print(
+            f"   Year: "
+            f"{paper.get('year', 'N/A')}"
+        )
+
+        abstract_preview = (
+            paper.get("abstract", "")[:250]
+        )
+
+        print(
+            f"   Abstract: "
+            f"{abstract_preview}...\n"
+        )

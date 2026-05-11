@@ -8,7 +8,7 @@ def main():
 
     results = agent.run(hypothesis, top_k=5)
 
-    print("\n🏆 Top Papers:\n")
+    print("\n Top Papers:\n")
 
     for i, p in enumerate(results, 1):
         print(f"{i}. {p.get('title')}")

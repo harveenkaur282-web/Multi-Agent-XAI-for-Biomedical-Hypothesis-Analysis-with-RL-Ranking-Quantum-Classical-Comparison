@@ -1,0 +1,25 @@
+User Hypothesis
+       ↓
+Query Builder
+       ↓
+PubMed API Search
+       ↓
+Paper Retrieval
+       ↓
+TF-IDF / Embedding Ranking
+       ↓
+Evidence Extraction
+THIS IS FOR LITERATURE AGENT PIPELINE(WE NEED TO FIRST FOCUS ON COMPLETING LITERATURE AGENT DATA RETRIEVAL PIEPLINE 
+AND THE EVIDENCE TRACKER AGENT)
+
+The query builder is the "translator" between human scientific language and 
+search-engine retrieval language.
+
+RECENT UPDATES- Implemented pubmed_fetcher.py for future live biomedical paper retrieval using the PubMed API.
+Added API request structure, query handling, metadata parsing, and scalable retrieval pipeline setup.
+Implemented query_builder.py to convert biomedical hypotheses 
+into optimized search queries for literature retrieval.
+Accordingly connected these two files: pubmed_fetcher.py(in literature agent) and query_builder.py(in lit agent)
+and optimized Accordingly
+
+LITERATURE AGENT MODULE
