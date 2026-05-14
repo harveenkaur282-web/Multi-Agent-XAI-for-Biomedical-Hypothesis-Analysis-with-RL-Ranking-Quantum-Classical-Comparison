@@ -1,0 +1,33 @@
+# Core AI & Orchestration
+crewai
+langchain
+openai
+python-dotenv
+
+# Literature & Data
+biopython
+requests
+pandas
+numpy
+scikit-learn
+sentence-transformers
+spacy
+networkx
+
+# Explainability (XAI)
+shap
+lime
+matplotlib
+seaborn
+
+# Reinforcement Learning
+stable-baselines3
+gymnasium
+
+# Quantum Computing (Simulation)
+qiskit
+qiskit-aer
+qiskit-machine-learning
+
+# Deployment
+streamlit
